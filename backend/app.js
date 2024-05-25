@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-
 const app = express();
+const port = 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -19,7 +19,7 @@ app.post('/movies', (req, res) => {
 
     if (!title || !protagonist || !category || !url) {
         return res.status(404).send("Todos los campos son obligatorios");
-    } else {
+    } 
         const newMovie = {
             id: movies.length+1,
             title,
@@ -27,7 +27,6 @@ app.post('/movies', (req, res) => {
             category,
             url
         }
-    }
 
     movies.push(newMovie);
     res.status(201).send(newMovie);
@@ -35,7 +34,7 @@ app.post('/movies', (req, res) => {
 })
 
 //ruta para obtener una pelicula en especifico
-app.get('/movies', (req, res) => {
+app.get('/movies/:id', (req, res) => {
     const movieId = parseInt(req.params.id);
     const movie = movies.find(p => p.id === movieId);
     if (movie) {
