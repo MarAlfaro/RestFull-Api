@@ -6,43 +6,72 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let peliculas = [];
+let movies = [];
 
 //obtener todas las peliculas
-app.get('/peliculas', (req, res) => {
-    res.json(peliculas);
+app.get('/movies', (req, res) => {
+    res.json(movies);
 })
 
 //crear una nueva pelicula
-app.post('/peliculas', (req, res) => {
-    const {titulo, protagonista, categoria, url} = req.body;
+app.post('/movies', (req, res) => {
+    const {title, protagonist, category, url} = req.body;
 
-    if (!titulo || !protagonista || !categoria || !url) {
+    if (!title || !protagonist || !category || !url) {
         return res.status(404).send("Todos los campos son obligatorios");
     } else {
-        const nuevaPelicula = {
-            id: peliculas.length+1,
-            titulo,
-            protagonista,
-            categoria,
+        const newMovie = {
+            id: movies.length+1,
+            title,
+            protagonist,
+            category,
             url
         }
     }
 
-    peliculas.push(nuevaPelicula);
-    res.status(201).send(nuevaPelicula);
+    movies.push(newMovie);
+    res.status(201).send(newMovie);
     
 })
 
 //ruta para obtener una pelicula en especifico
-app.get('/peliculas', (req, res) => {
-    const peliculaId = parseInt(req.params.id);
-    const pelicula = peliculas.find(p => p.id === peliculaId);
-    if (pelicula) {
-        res.json(pelicula);
+app.get('/movies', (req, res) => {
+    const movieId = parseInt(req.params.id);
+    const movie = movies.find(p => p.id === movieId);
+    if (movie) {
+        res.json(movie);
     } else {
         res.status(404).send("No se encontro la pelicula");
     }
 });
 
 //ruta para actualizar una pelicula
+app.put("/movies/:id", (req, res) => {
+  const movieid = parseInt(req.params.id);
+  const movie = movies.find((t) => t.id === movieid);
+  if (movie) {
+    movie.title = req.body.title || movie.title;
+    movie.protagonist = req.body.protagonist || movie.protagonist;
+    movie.category = req.body.category || movie.category;
+    movie.url = req.body.url || movie.url;
+    res.json(movie);
+  } else {
+    res.status(404).send("No se actualizo la pelicula");
+  }
+});
+
+//eliminar
+app.delete("/movies/:id", (req, res) => {
+  const movieid = parseInt(req.params.id);
+  const moviein = movies.findIndex((t) => t.id === movieid);
+  if (moviein !== -1) {
+    movies.splice(moviein, 1);
+    res.status(204).send("Se elimino correctamente");
+  } else {
+    res.status(404).send("No se elimino la pelicula");
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Servidor corriendo en la url http://localhost:${port}`);
+});
