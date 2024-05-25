@@ -1,64 +1,48 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
+
 const app = express();
-const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
 
-const movies = [];
+let peliculas = [];
 
-app.get("/movies", (req, res) => {
-  res.json({ data: movies });
+//obtener todas las peliculas
+app.get('/peliculas', (req, res) => {
+    res.json(peliculas);
+})
+
+//crear una nueva pelicula
+app.post('/peliculas', (req, res) => {
+    const {titulo, protagonista, categoria, url} = req.body;
+
+    if (!titulo || !protagonista || !categoria || !url) {
+        return res.status(404).send("Todos los campos son obligatorios");
+    } else {
+        const nuevaPelicula = {
+            id: peliculas.length+1,
+            titulo,
+            protagonista,
+            categoria,
+            url
+        }
+    }
+
+    peliculas.push(nuevaPelicula);
+    res.status(201).send(nuevaPelicula);
+    
+})
+
+//ruta para obtener una pelicula en especifico
+app.get('/peliculas', (req, res) => {
+    const peliculaId = parseInt(req.params.id);
+    const pelicula = peliculas.find(p => p.id === peliculaId);
+    if (pelicula) {
+        res.json(pelicula);
+    } else {
+        res.status(404).send("No se encontro la pelicula");
+    }
 });
 
-app.get("/movies/:id", (req, res) => {
-  const movie = movies.find((movie) => movie.id === Number(req.params.id));
-  if (!task) {
-    res.status(404);
-    return res.json({ error: "Pelicula no encontrada" });
-  }
-
-  res.json({ data: task });
-});
-
-app.post("/movies", (req, res) => {
-  const newMovie = {};
-  tasks.push(newMovie);
-  res.status(201).json({ data: newMovie });
-});
-
-app.put("/movies/:id", (req, res) => {
-  const movieIndex = movies.findIndex(
-    (movie) => movie.id === Number(req.params.id)
-  );
-
-  if (movieIndex === -1) {
-    res.status(404);
-    return res.json({ error: "Pelicula no encontrada" });
-  }
-
-  tasks[movieIndex] = {
-    ...tasks[movieIndex],
-    ...req.body,
-  };
-
-  res.json({ data: movies[movieIndex] });
-});
-
-app.delete("/tasks/:id", (req, res) => {
-  const movie = movies.find((movie) => movie.id === Number(req.params.id));
-
-  if (!movie) {
-    res.status(404);
-    return res.json({ error: "Pelicula no encontrada" });
-  }
-
-  movies.splice(movie.indexOf(task), 1);
-
-  res.json({ data: movie });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+//ruta para actualizar una pelicula
