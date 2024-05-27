@@ -37,21 +37,91 @@
   }
 }
 
+h2 {
+  color: #373A40;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 .container-input {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin: 0 0 25px 0;
 }
 
 .container-input input {
   width: 100%;
+  border: 2px solid #EEEEEE;
+  padding: 8px 12px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.title-movies {
+  font-size: 24px;
+  color: #373A40;
 }
 
 .container-input label {
-  width: 100px;
+  width: 125px;
+  text-align: left;
+  margin-right: 12px;
+  color: #686D76;
 }
 
 .form {
   padding: 10px;
-  width: 800px;
-  border: 1px solid red;
+  width: 500px;
+  margin: 0 auto;
+  border: 2px solid #EEEEEE;
+}
+
+.form button {
+  color: #373A40;
+}
+
+.create-movie {
+  border: 2px solid #EEEEEE;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.movie-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.movie {
+  border: 2px solid #EEEEEE;
+  text-align: left;
+  padding: 12px;
+}
+
+.movie span {
+  color: #686D76;
+}
+
+.buttons button{
+  border-radius: 6px;
+  border: 2px solid #EEEEEE;
+  padding: 12px 18px;
+  margin-right: 12px;
+  cursor: pointer;
+  color: #373A40;
+}
+
+.buttons .edit:hover {
+  background-color: #373A40;
+  color: #EEEEEE;
+}
+
+.buttons .delete:hover {
+  background-color: #DC5F00;
+  color: #EEEEEE;
 }
