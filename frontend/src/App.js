@@ -112,30 +112,38 @@ function App() {
       </form>
       <p className="title-movies">Lista de películas</p>
       <div className="movie-container">
-        {movies.map((movie) => (
-          <div key={movie.id} className="movie">
-            <p>
-              <span>Titulo:</span> {movie.title}
-            </p>
-            <p>
-              <span>Protagonista:</span> {movie.protagonist}
-            </p>
-            <p>
-              <span>Categoria:</span> {movie.category}
-            </p>
-            <p>
-              <span>URL:</span> {movie.url}
-            </p>
-            <div className="buttons">
-              <button onClick={() => updateMovie(movie.id)} className="edit">
-                Editar
-              </button>
-              <button onClick={() => deleteMovie(movie.id)} className="delete">
-                Eliminar
-              </button>
-            </div>
-          </div>
-        ))}
+        {movies.length === 0
+          ? "No hay peliculas"
+          : movies.map((movie) => (
+              <div key={movie.id} className="movie">
+                <p>
+                  <span>Titulo:</span> {movie.title}
+                </p>
+                <p>
+                  <span>Protagonista:</span> {movie.protagonist}
+                </p>
+                <p>
+                  <span>Categoria:</span> {movie.category}
+                </p>
+                <p>
+                  <span>URL:</span> {movie.url}
+                </p>
+                <div className="buttons">
+                  <button
+                    onClick={() => updateMovie(movie.id)}
+                    className="edit"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => deleteMovie(movie.id)}
+                    className="delete"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );
