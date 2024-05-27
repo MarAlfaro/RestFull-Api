@@ -1,81 +1,75 @@
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
+const port = 4000;
 
 app.use(cors());
 app.use(express.json());
 
-let peliculas = [];
+let movies = [];
 
 //obtener todas las peliculas
-app.get("/peliculas", (req, res) => {
-  res.json(peliculas);
+app.get("/movies", (req, res) => {
+  res.json(movies);
 });
 
 //crear una nueva pelicula
-app.post("/peliculas", (req, res) => {
-  const { titulo, protagonista, categoria, url } = req.body;
+app.post("/movies", (req, res) => {
+  const { title, protagonist, category, url } = req.body;
 
-  if (!titulo || !protagonista || !categoria || !url) {
+  if (!title || !protagonist || !category || !url) {
     return res.status(404).send("Todos los campos son obligatorios");
-  } else {
-    const nuevaPelicula = {
-      id: peliculas.length + 1,
-      titulo,
-      protagonista,
-      categoria,
-      url,
-    };
   }
+  const newMovie = {
+    id: movies.length + 1,
+    title,
+    protagonist,
+    category,
+    url,
+  };
 
-  peliculas.push(nuevaPelicula);
-  res.status(201).send(nuevaPelicula);
+  movies.push(newMovie);
+  res.status(201).send(newMovie);
 });
 
 //ruta para obtener una pelicula en especifico
-app.get("/peliculas/:id", (req, res) => {
-  const peliculaId = parseInt(req.params.id);
-  const pelicula = peliculas.find((p) => p.id === peliculaId);
-  if (pelicula) {
-    res.json(pelicula);
+app.get("/movies/:id", (req, res) => {
+  const movieId = parseInt(req.params.id);
+  const movie = movies.find((p) => p.id === movieId);
+  if (movie) {
+    res.json(movie);
   } else {
     res.status(404).send("No se encontro la pelicula");
   }
 });
 
 //ruta para actualizar una pelicula
-app.put("/peliculas/:id", (req, res) => {
-  const indexPelicula = peliculas.findIndex(
-    (pelicula) => pelicula.id === Number(req.params.id)
-  );
-
-  if (indexPelicula === -1) {
-    res.status(404);
-    return res.json({ error: "Pelicula no encontrada" });
+app.put("/movies/:id", (req, res) => {
+  const movieid = parseInt(req.params.id);
+  const movie = movies.find((t) => t.id === movieid);
+  if (movie) {
+    movie.title = req.body.title || movie.title;
+    movie.protagonist = req.body.protagonist || movie.protagonist;
+    movie.category = req.body.category || movie.category;
+    movie.url = req.body.url || movie.url;
+    res.json(movie);
+  } else {
+    res.status(404).send("No se actualizo la pelicula");
   }
-
-  peliculas[indexPelicula] = {
-    ...peliculas[indexPelicula],
-    ...req.body,
-  };
-
-  res.json(peliculas[indexPelicula]);
 });
 
-//Ruta para eliminar pelicula
-
-app.delete("/tasks/:id", (req, res) => {
-  const pelicula = peliculas.find(
-    (pelicula) => pelicula.id === Number(req.params.id)
-  );
-
-  if (!pelicula) {
-    res.status(404);
-    return res.json({ error: "Pelicula no encontrada" });
+//eliminar
+app.delete("/movies/:id", (req, res) => {
+  const movieid = parseInt(req.params.id);
+  const moviein = movies.findIndex((t) => t.id === movieid);
+  if (moviein !== -1) {
+    movies.splice(moviein, 1);
+    res.status(204).send("Se elimino correctamente");
+  } else {
+    res.status(404).send("No se elimino la pelicula");
   }
+});
 
-  peliculas.splice(peliculas.indexOf(pelicula), 1);
-
-  res.json(pelicula);
+app.listen(port, () => {
+  console.log(`Servidor corriendo en la url http://localhost:${port}`);
 });
